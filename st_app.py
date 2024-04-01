@@ -4,7 +4,7 @@ from langchain.prompts.chat import ChatPromptTemplate
 from langchain.vectorstores.chroma import Chroma
 from langchain_core.output_parsers.string import StrOutputParser
 from langchain_core.runnables.passthrough import RunnablePassthrough
-from langchain_openai.chat_models import ChatOpenAI
+from langchain_openai.llms import OpenAI
 from langchain_openai.embeddings import OpenAIEmbeddings
 
 load_dotenv()
@@ -32,7 +32,7 @@ Question: {question}
 """
 prompt = ChatPromptTemplate.from_template(template)
 retriever = get_retriever()
-model = ChatOpenAI(temperature=0)
+model = OpenAI(temperature=0)
 chain = (
     {"context": retriever, "question": RunnablePassthrough()}
     | prompt
