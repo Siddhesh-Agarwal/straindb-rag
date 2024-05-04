@@ -14,7 +14,12 @@ ___
   - **Solution**: `eval("[1, 2, 3]")` returns `[1, 2, 3]`
 - The data needs to be saved.
   - **Solution**: dump data in JSON format.
- 
+
 ### Data Tokenization
 
 - The Data was embedded into ChromaDB (persistent client) using the `OpenAIEmbeddings` function.
+  - **Solution**: `OpenAIEmbeddings` function from the `langchain_openai` package.
+
+### Retrieval
+
+- The data was retrieved from the ChromaDB using the `Chroma` class.
