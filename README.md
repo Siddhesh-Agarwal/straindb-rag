@@ -8,9 +8,13 @@ ___
 
 ### Extracting and Validating the Data
 
-- The SQLite DataBase consisted of 19 tables out of which the `strains_strain` table was required.
-  - **solution**: extract data using sqlite module and create a `Strain` class (that inherits `pydantic.BaseModel`) for data validation
+- The SQLite DataBase consisted of 19 tables from which the `strains_strain` table was extracted.
+  - **Solution**: extract data using SQLite module and create a `Strain` class (that inherits `pydantic.BaseModel`) for data validation
 - Then the table's data cells consisted of lists in string format which needed to be converted back
-  - **solution**: `eval("[1, 2, 3]")` returns `[1, 2, 3]`
+  - **Solution**: `eval("[1, 2, 3]")` returns `[1, 2, 3]`
 - The data needs to be saved.
-  - **solution**: dump data in json format.
+  - **Solution**: dump data in JSON format.
+ 
+### Data Tokenization
+
+- The Data was embedded into ChromaDB (persistent client) using the `OpenAIEmbeddings` function.
