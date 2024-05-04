@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "straindb-rag"
+version = "0.1.0"
+description = "An RAG Model based on [StrainsDB](https://strainsdb.org/)."
+authors = ["Siddhesh Agarwal <siddhesh.agarwal@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.34.0"
+langchain = "^0.1.17"
+langchain-openai = "^0.1.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
