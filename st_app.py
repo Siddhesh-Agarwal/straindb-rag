@@ -12,10 +12,10 @@ st.title("StrainDB RAG")
 
 
 @st.cache_resource
-def get_retriever():
+def get_retriever(api_key: SecretStr):
     """A Chroma retriever that uses OpenAI embeddings"""
 
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-large", api_key=api_key)
     return Chroma(
         collection_name="strains",
         embedding_function=embeddings,
@@ -31,7 +31,6 @@ template = """Answer the question based only on the following context:
 Question: {question}
 """
 prompt = ChatPromptTemplate.from_template(template)
-retriever = get_retriever()
 
 if st.button("Search"):
     if not openai_api_key:
@@ -40,16 +39,19 @@ if st.button("Search"):
     if not query:
         st.warning("Please enter a query")
         st.stop()
-    model = OpenAI(temperature=0, api_key=SecretStr(openai_api_key))
+
+    api_key = SecretStr(openai_api_key)
+    retriever = get_retriever(api_key)
+    model = OpenAI(temperature=0, api_key=api_key)
     chain = (
         {"context": retriever, "question": RunnablePassthrough()}
         | prompt
         | model
         | StrOutputParser()
     )
+
     if not query:
         st.warning("Please enter a query")
     else:
         with st.spinner("Searching..."):
-            res = chain.stream(query)
-            st.write_stream(res)
+            st.write_stream(chain.stream(query))
