@@ -12,7 +12,7 @@ st.title("StrainDB RAG")
 
 
 @st.cache_resource
-def get_retriever(api_key: SecretStr):
+def get_retriever():
     """A Chroma retriever that uses OpenAI embeddings"""
 
     embeddings = OpenAIEmbeddings(model="text-embedding-3-large", api_key=api_key)
@@ -23,14 +23,24 @@ def get_retriever(api_key: SecretStr):
     ).as_retriever()
 
 
-openai_api_key = st.text_input("Enter your OpenAI API key")
-query = st.text_input("Enter your query")
-template = """Answer the question based only on the following context:
+openai_api_key = st.text_input(
+    label="Enter your OpenAI API key",
+    max_chars=51,
+    help="Get an API key from https://platform.openai.com/account/api-keys",
+    type="password",
+    placeholder="sk-...",
+)
+query = st.text_input(
+    label="Enter your query",
+    help="Search for strains",
+    placeholder="What are the medical uses of Stunna",
+)
+prompt = ChatPromptTemplate.from_template("""
+Answer the question based only on the following context:
 {context}
 
 Question: {question}
-"""
-prompt = ChatPromptTemplate.from_template(template)
+""")
 
 if st.button("Search"):
     if not openai_api_key:
@@ -41,7 +51,7 @@ if st.button("Search"):
         st.stop()
 
     api_key = SecretStr(openai_api_key)
-    retriever = get_retriever(api_key)
+    retriever = get_retriever()
     model = OpenAI(temperature=0, api_key=api_key)
     chain = (
         {"context": retriever, "question": RunnablePassthrough()}
